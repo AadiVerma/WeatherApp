@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:weather/weather.dart';
 import 'package:weatherapp/first_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -55,19 +56,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return await Geolocator.getCurrentPosition();
   }
+
   WeatherFactory _wf1 = WeatherFactory("26c62faf4067fa78674fe2072bc57925");
   Position? p;
   Weather? weather;
   _fetchWeather() async {
     try {
       p = await _determinePosition();
-      if(p!=null) {
-        await _wf1.currentWeatherByLocation(p!.latitude,p!.longitude).then((value) {
+      if (p != null) {
+        await _wf1
+            .currentWeatherByLocation(p!.latitude, p!.longitude)
+            .then((value) {
           setState(() {
             weather = value;
           });
         });
-      }else{
+      } else {
         print('It is Null');
       }
     } catch (e) {
@@ -76,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void initState(){
+  void initState() {
     setState(() {
       _fetchWeather();
     });
@@ -92,14 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           systemOverlayStyle:
               const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)),
-      body:
-      (weather == null)
+      body: (weather == null)
           ? Shimmer.fromColors(
               baseColor: Colors.grey.shade700,
               highlightColor: Colors.white70,
               child: FirstScreen())
-          :
-      Padding(
+          : Padding(
               padding:
                   const EdgeInsets.fromLTRB(40, 1.2 * kToolbarHeight, 40, 20),
               child: SizedBox(
@@ -162,7 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.white,
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold)),
-                            Center(child: getWeatherIcon(weather!.weatherConditionCode!)),
+                            Center(
+                                child: getWeatherIcon(
+                                    weather!.weatherConditionCode!)),
                             Center(
                               child: Text(
                                 '${weather?.temperature!.fahrenheit!.round()}°F',
